@@ -1,0 +1,10 @@
+{
+  "startPages": ["https://www.udacity.com/"],
+  "ignoredUrls": ["https://blog.udacity.com/.*"],
+  "ignoredWords": ["^.{1,3}$"],
+  "parallelism": 4,
+  "maxDepth": 2,
+  "timeoutSeconds": 1,
+  "popularWordCount": 5,
+  "profileOutputPath": "profileData.txt"
+}

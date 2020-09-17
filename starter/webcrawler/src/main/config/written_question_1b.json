@@ -1,0 +1,9 @@
+{
+  "startPages": ["https://www.udacity.com/"],
+  "ignoredWords": ["^.{1,3}$"],
+  "implementationOverride": "com.udacity.webcrawler.ParallelWebCrawler",
+  "maxDepth": 10,
+  "timeoutSeconds": 2,
+  "popularWordCount": 5,
+  "profileOutputPath": "profileData.txt"
+}
