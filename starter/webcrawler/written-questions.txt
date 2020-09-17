@@ -12,10 +12,8 @@ Q1. Run the web crawler using the configurations located at src/main/config/writ
     Why did the parser take more time when run with ParallelWebCrawler?
 
 
-Q2. Your manager used your new web crawler to run two different crawls that are described by
-    src/main/config/written_question_1a.json and src/main/config/written_question_1b.json.
-    Your manager tells you that the sequential crawler outperforms the parallel crawler on her old desktop computer and
-    she would like to know why.
+Q2. Your manager ran your crawler on her old personal computer, using the configurations from Q1, and she notices that
+    the sequential crawler actually outperforms the parallel crawler. She would like to know why.
 
     (a) Suggest one reason why the sequential web crawler was able to read more web pages than the parallel crawler.
         (Hint: Try setting "parallelism" to 1 in the JSON configs to simulate your manager's computer.)
