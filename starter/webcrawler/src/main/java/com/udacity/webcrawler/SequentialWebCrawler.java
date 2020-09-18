@@ -8,14 +8,10 @@ import javax.inject.Inject;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -63,17 +59,8 @@ final class SequentialWebCrawler implements WebCrawler {
           .build();
     }
 
-    PriorityQueue<Entry<String, Integer>> sortedCounts =
-        new PriorityQueue<>(counts.size(), new WordCountComparator());
-    sortedCounts.addAll(counts.entrySet());
-    Map<String, Integer> topCounts = new LinkedHashMap<>();
-    for (int i = 0; i < Math.min(popularWordCount, counts.size()); i++) {
-      Map.Entry<String, Integer> entry = sortedCounts.poll();
-      topCounts.put(entry.getKey(), entry.getValue());
-    }
-
     return new CrawlResult.Builder()
-        .setWordCounts(topCounts)
+        .setWordCounts(WordCounts.sort(counts, popularWordCount))
         .setUrlsVisited(visitedUrls.size())
         .build();
   }

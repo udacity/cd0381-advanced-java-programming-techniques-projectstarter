@@ -87,11 +87,12 @@ public final class ProfilerImplTest {
     assertWithMessage("Streams should usually be closed in the same scope where they were created")
         .that(writer.isClosed())
         .isFalse();
+    String written = writer.toString();
     assertWithMessage("The profile data was not written or is incorrect")
-        .that(writer.toString())
+        .that(written)
         .contains(
-            "com.udacity.webcrawler.profiler.ProfilerImplTest$ProfiledInterfaceImpl#profiled " +
-                "took 0m 3s 0ms");
+            "com.udacity.webcrawler.profiler.ProfilerImplTest$ProfiledInterfaceImpl#profiled");
+    assertThat(written).contains("0m 3s 0ms");
   }
 
   @Test
@@ -118,11 +119,11 @@ public final class ProfilerImplTest {
     assertWithMessage("Streams should usually be closed in the same scope where they were created")
         .that(writer.isClosed())
         .isFalse();
+    String written = writer.toString();
     assertWithMessage("Profile data should still be recorded if an exception was thrown.")
-        .that(writer.toString())
-        .contains(
-            "com.udacity.webcrawler.profiler.ProfilerImplTest$ProfiledInterfaceImpl" +
-                "#throwSomething took 0m 1s 0ms");
+        .that(written)
+        .contains("com.udacity.webcrawler.profiler.ProfilerImplTest$ProfiledInterfaceImpl");
+    assertThat(written).contains("0m 1s 0ms");
   }
 
   /**
