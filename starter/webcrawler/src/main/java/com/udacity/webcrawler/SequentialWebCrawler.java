@@ -49,7 +49,7 @@ final class SequentialWebCrawler implements WebCrawler {
     Map<String, Integer> counts = new HashMap<>();
     Set<String> visitedUrls = new HashSet<>();
     for (String url : startingUrls) {
-      runInternal(url, deadline, maxDepth, counts, visitedUrls);
+      crawlInternal(url, deadline, maxDepth, counts, visitedUrls);
     }
 
     if (counts.isEmpty()) {
@@ -65,7 +65,7 @@ final class SequentialWebCrawler implements WebCrawler {
         .build();
   }
 
-  private void runInternal(
+  private void crawlInternal(
       String url,
       Instant deadline,
       int maxDepth,
@@ -92,7 +92,7 @@ final class SequentialWebCrawler implements WebCrawler {
       }
     }
     for (String link : result.getLinks()) {
-      runInternal(link, deadline, maxDepth - 1, counts, visitedUrls);
+      crawlInternal(link, deadline, maxDepth - 1, counts, visitedUrls);
     }
   }
 }

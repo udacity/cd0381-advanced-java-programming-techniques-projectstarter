@@ -1,19 +1,20 @@
 package com.udacity.webcrawler.profiler;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Helper class that records method performance data from the method interceptor.
  */
 final class ProfilingState {
-  // TODO: ArrayList is not a very good choice here. Replace this with a better choice of data
-  //       structure.
-  private final List<String> data = new ArrayList<>();
+  private final Map<String, Duration> data = new ConcurrentHashMap<>();
 
   /**
    * Records the given method invocation data.
@@ -26,8 +27,11 @@ final class ProfilingState {
     Objects.requireNonNull(callingClass);
     Objects.requireNonNull(method);
     Objects.requireNonNull(elapsed);
-    // TODO: Complete this method implementation. This code is here as a place-holder.
-    data.add(formatData(callingClass, method, elapsed));
+    if (elapsed.isNegative()) {
+      throw new IllegalArgumentException("negative elapsed time");
+    }
+    String key = formatMethodCall(callingClass, method);
+    data.compute(key, (k, v) -> (v == null) ? elapsed : v.plus(elapsed));
   }
 
   /**
@@ -38,22 +42,19 @@ final class ProfilingState {
    * {@code M()}, with each invocation taking 1 second. The total {@link Duration} reported by
    * this {@code write()} method for {@code M()} should be 3 seconds.
    */
-  void write(Writer writer) {
-    // This is here to get rid of the unused variable warning.
-    Objects.requireNonNull(writer);
-    // TODO: Write the stored data to file. Each method should get its own line that contains the
-    //       amount of time that was spent calling that method. If a method is called multiple times
-    //       it all counts toward the same bucket of time.
-  }
+  void write(Writer writer) throws IOException {
+    List<String> entries =
+        data.entrySet()
+            .stream()
+            .sorted(Map.Entry.comparingByKey())
+            .map(e -> e.getKey() + " took " + formatDuration(e.getValue()) + System.lineSeparator())
+            .collect(Collectors.toList());
 
-  /**
-   * Formats a piece of profile data.
-   */
-  private static String formatData(Class<?> callingClass, Method method, Duration elapsed) {
-    String line =
-        String.format(
-            "%s took %s", formatMethodCall(callingClass, method), formatDuration(elapsed));
-    return line + System.lineSeparator();
+    // We have to use a for-loop here instead of a Stream API method because Writer#write() can
+    // throw an IOException, and lambdas are not allowed to throw checked exceptions.
+    for (String entry : entries) {
+      writer.write(entry);
+    }
   }
 
   /**

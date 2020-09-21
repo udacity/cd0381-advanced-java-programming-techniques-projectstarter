@@ -13,7 +13,7 @@ final class ProfilingMethodInterceptor implements InvocationHandler {
 
   private final Clock clock;
 
-  // TODO: You may need to add more instance fields and constructor arguments to this class.
+  // TODO: You will need to add more instance fields and constructor arguments to this class.
   ProfilingMethodInterceptor(Clock clock) {
     this.clock = Objects.requireNonNull(clock);
   }

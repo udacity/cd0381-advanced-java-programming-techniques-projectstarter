@@ -22,7 +22,14 @@ Q2. Your manager ran your crawler on her old personal computer, using the config
         crawler. Why will it perform better?
 
 
-Q3. Identify three (3) different design patterns used in this project, and explain which interfaces, classes, and/or
+Q3. Analyze your method profiler through the lens of Aspect Oriented Programming, by answering the following questions:
+
+    (a) What is the cross-cutting concern?
+
+    (b) What are the join points?
+
+
+Q4. Identify three (3) different design patterns used in this project, and explain which interfaces, classes, and/or
     libraries use or implement those design patterns.
 
     For each pattern, name one thing about the pattern that you LIKED, and one thing you DISLIKED. If you did not like
