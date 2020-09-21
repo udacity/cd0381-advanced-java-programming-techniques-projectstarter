@@ -3,7 +3,6 @@ package com.udacity.webcrawler.profiler;
 import com.udacity.webcrawler.testing.CloseableStringWriter;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringWriter;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public final class ProfilerImplTest {
   private final FakeClock clock = new FakeClock();
   private final Profiler profiler = new ProfilerImpl(clock);
-  private final ProfiledInterface delegate = new ProfiledInterfaceImpl(clock);
+  private final ProfiledInterfaceImpl delegate = new ProfiledInterfaceImpl(clock);
 
   @Test
   public void delegateHasNoMethodsAnnotated() {
@@ -65,6 +64,17 @@ public final class ProfilerImplTest {
   }
 
   @Test
+  public void testNonObjectEquals() {
+    ProfiledInterface proxy = profiler.wrap(ProfiledInterface.class, delegate);
+
+    assertWithMessage("Incorrect equals() method was called")
+        .that(proxy.equals("foo", "bar"))
+        .isFalse();
+
+    assertThat(delegate.wasFakeEqualsCalled()).isTrue();
+  }
+
+  @Test
   public void testBasicProfiling() throws Exception {
     ProfiledInterface proxy = profiler.wrap(ProfiledInterface.class, delegate);
 
@@ -100,9 +110,9 @@ public final class ProfilerImplTest {
     ProfiledInterface proxy = profiler.wrap(ProfiledInterface.class, delegate);
 
     Instant beforeInvocation = clock.instant();
-    Exception expected = assertThrows(
-        Exception.class,
-        () -> proxy.throwSomething(new Exception("expected exception")),
+    Throwable expected = assertThrows(
+        Throwable.class,
+        () -> proxy.throwSomething(new Throwable("expected exception")),
         "The method interceptor should forward exceptions thrown by the wrapped object");
     assertWithMessage("The proxy threw a different exception than was thrown by the wrapped object")
         .that(expected)
@@ -147,6 +157,8 @@ public final class ProfilerImplTest {
 
     @Profiled
     void throwSomething(Throwable throwable) throws Throwable;
+
+    boolean equals(String foo, String bar);
   }
 
   /**
@@ -154,6 +166,7 @@ public final class ProfilerImplTest {
    */
   private static final class ProfiledInterfaceImpl implements ProfiledInterface {
     private final FakeClock fakeClock;
+    private boolean wasFakeEqualsCalled = false;
 
     ProfiledInterfaceImpl(FakeClock fakeClock) {
       this.fakeClock = Objects.requireNonNull(fakeClock);
@@ -175,6 +188,18 @@ public final class ProfilerImplTest {
     public boolean equals(Object other) {
       // All instances of ProfiledInterface are equal to one another.
       return (other instanceof ProfiledInterface);
+    }
+
+    @Override
+    public boolean equals(String foo, String bar) {
+      Objects.requireNonNull(foo);
+      Objects.requireNonNull(bar);
+      wasFakeEqualsCalled = true;
+      return false;
+    }
+
+    public boolean wasFakeEqualsCalled() {
+      return wasFakeEqualsCalled;
     }
   }
 }
