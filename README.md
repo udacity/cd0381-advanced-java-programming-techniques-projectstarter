@@ -101,7 +101,8 @@ Looking closely at the code repo that was shared with you, it's clear that the w
   
        *Example*: Suppose your starting page "A", links to the following web pages, and you want to run with a depth of 2.
        
-![Page Traversal](Page Traversal.png)
+![Page Traversal](PageTraversal.png)
+
 In This Example, Your Crawler Would Only Visit Pages A, B, C, and D
 
 * `timeoutSeconds` - The max amount of time the crawler is allowed to run, in seconds. Once this amount of time has been reached, the crawler will finish processing any HTML it has already downloaded, but it is not allowed to download any more HTML or follow any more hyperlinks.
