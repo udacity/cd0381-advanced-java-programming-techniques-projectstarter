@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public final class ConfigurationLoaderTest {
 
   @Test
-  public void testBasicJsonConversion() throws Exception {
+  public void testBasicJsonConversion() {
     String json = "{ " +
         "\"startPages\": [\"http://example.com\", \"http://example.com/foo\"], " +
         "\"ignoredUrls\": [\"http://example\\\\.com/.*\"], " +
@@ -51,7 +51,7 @@ public final class ConfigurationLoaderTest {
   }
 
   @Test
-  public void testOptionalOptions() throws Exception {
+  public void testOptionalOptions() {
     // Same as above, but without any explicit implementationOverride or parallelism.
     String json = "{ " +
         "\"maxDepth\": 100, " +

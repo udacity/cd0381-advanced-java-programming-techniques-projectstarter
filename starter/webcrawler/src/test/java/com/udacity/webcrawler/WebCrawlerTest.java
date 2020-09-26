@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import javax.inject.Inject;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -87,7 +86,7 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(0)
             .setPopularWordCount(3)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -126,7 +125,7 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(10)
             .setPopularWordCount(3)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -163,10 +162,10 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(10)
             .setPopularWordCount(3)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
-            .addStartPage(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
-            .addIgnoredUrl(".*-loop\\.html$")
-            .addIgnoredUrl(".*dead-.*")
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
+            .addIgnoredUrls(".*-loop\\.html$")
+            .addIgnoredUrls(".*dead-.*")
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -191,9 +190,9 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(10)
             .setPopularWordCount(3)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
-            .addIgnoredWord("^...$")
-            .addIgnoredWord("^......$")
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addIgnoredWords("^...$")
+            .addIgnoredWords("^......$")
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -218,7 +217,7 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(1)
             .setPopularWordCount(20)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -249,7 +248,7 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(10)
             .setPopularWordCount(20)
-            .addStartPage(Paths.get(DATA_DIR, "link-1.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "link-1.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -281,7 +280,7 @@ public final class WebCrawlerTest {
             .setMaxDepth(10)
             .setPopularWordCount(3)
             .setTimeoutSeconds(1)
-            .addStartPage(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);
@@ -306,9 +305,9 @@ public final class WebCrawlerTest {
             .setImplementationOverride(crawlerClass.getName())
             .setMaxDepth(10)
             .setPopularWordCount(3)
-            .addStartPage(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
-            .addStartPage(Paths.get(DATA_DIR, "link-1.html").toUri().toString())
-            .addStartPage(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "test-page.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "link-1.html").toUri().toString())
+            .addStartPages(Paths.get(DATA_DIR, "infinite-loop.html").toUri().toString())
             .build();
     Guice.createInjector(new WebCrawlerModule(config), new NoOpProfilerModule())
         .injectMembers(this);

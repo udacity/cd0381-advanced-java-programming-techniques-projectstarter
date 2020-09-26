@@ -190,8 +190,10 @@ public final class CrawlerConfiguration {
      *
      * <p>Does nothing if the given page has already been added. See {@link #getStartPages()}.
      */
-    public Builder addStartPage(String startPage) {
-      startPages.add(Objects.requireNonNull(startPage));
+    public Builder addStartPages(String... startPages) {
+      for (String startPage : startPages) {
+        this.startPages.add(Objects.requireNonNull(startPage));
+      }
       return this;
     }
 
@@ -200,10 +202,12 @@ public final class CrawlerConfiguration {
      *
      * <p>Does nothing if the same pattern has already been added. See {@link #getIgnoredUrls()}.
      *
-     * @param regex a regular expression that defines a valid {@link Pattern}.
+     * @param patterns one or more regular expressions that define a valid {@link Pattern}.
      */
-    public Builder addIgnoredUrl(String regex) {
-      ignoredUrls.add(Objects.requireNonNull(regex));
+    public Builder addIgnoredUrls(String... patterns) {
+      for (String pattern : patterns) {
+        ignoredUrls.add(Objects.requireNonNull(pattern));
+      }
       return this;
     }
 
@@ -216,10 +220,12 @@ public final class CrawlerConfiguration {
      * <p>See {@link com.udacity.webcrawler.json.CrawlResult#getWordCounts()} for more information
      * about the popular word computation.
      *
-     * @param regex a regular expression that defines a valid {@link Pattern}.
+     * @param patterns one or more regular expressions that define a valid {@link Pattern}.
      */
-    public Builder addIgnoredWord(String regex) {
-      ignoredWords.add(Objects.requireNonNull(regex));
+    public Builder addIgnoredWords(String... patterns) {
+      for (String pattern : patterns) {
+        ignoredWords.add(Objects.requireNonNull(pattern));
+      }
       return this;
     }
 
