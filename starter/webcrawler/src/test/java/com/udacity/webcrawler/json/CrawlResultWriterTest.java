@@ -1,13 +1,14 @@
 package com.udacity.webcrawler.json;
 
+import com.udacity.webcrawler.testing.CloseableStringWriter;
 import org.junit.jupiter.api.Test;
 
-import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 
 public final class CrawlResultWriterTest {
   @Test
@@ -21,11 +22,15 @@ public final class CrawlResultWriterTest {
         new CrawlResult.Builder()
             .setUrlsVisited(17)
             .setWordCounts(counts)
-        .build();
-    CrawlResultWriter writer = new CrawlResultWriter(result);
+            .build();
 
-    StringWriter output = new StringWriter();
-    writer.write(output);
+    CrawlResultWriter resultWriter = new CrawlResultWriter(result);
+    CloseableStringWriter stringWriter = new CloseableStringWriter();
+    resultWriter.write(stringWriter);
+    assertWithMessage("Streams should usually be closed in the same scope where they were created")
+        .that(stringWriter.isClosed())
+        .isFalse();
+    String written = stringWriter.toString();
 
     // The purpose of all the wildcard matchers (".*") is to make sure we allow the JSON output to
     // contain extra whitespace where it does not matter.
@@ -39,6 +44,6 @@ public final class CrawlResultWriterTest {
             ".*\"urlsVisited\".*:.*17" +
             ".*}.*", Pattern.DOTALL);
 
-    assertThat(output.toString()).matches(expected);
+    assertThat(written).matches(expected);
   }
 }
