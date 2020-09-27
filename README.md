@@ -107,11 +107,11 @@ In This Example, Your Crawler Would Only Visit Pages A, B, C, and D
 
 * `timeoutSeconds` - The max amount of time the crawler is allowed to run, in seconds. Once this amount of time has been reached, the crawler will finish processing any HTML it has already downloaded, but it is not allowed to download any more HTML or follow any more hyperlinks.
   
-  * `popularWordCount` - The number of popular words to record in the output. In this example, the 3 most frequent words will be recorded. If there is a tie in the top 3, word length is used as a tiebreaker, with longer words taking preference. If the words are the same length, words that come first alphabetically get ranked higher.
+* `popularWordCount` - The number of popular words to record in the output. In this example, the 3 most frequent words will be recorded. If there is a tie in the top 3, word length is used as a tiebreaker, with longer words taking preference. If the words are the same length, words that come first alphabetically get ranked higher.
   
-  * `profileOutputPath` - Path to the output file where performance data for this web crawl should be written. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
+* `profileOutputPath` - Path to the output file where performance data for this web crawl should be written. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
   
-  * `resultPath` - Path where the web crawl result JSON should be written. If a file already exists at that path, it should be overwritten. If this option is empty or unset, the result should be printed to standard output.
+* `resultPath` - Path where the web crawl result JSON should be written. If a file already exists at that path, it should be overwritten. If this option is empty or unset, the result should be printed to standard output.
 
 ### Implementing Crawler Configuration
 
@@ -121,9 +121,21 @@ Your task is to fill in the `src/main/java/com/udacity/webcrawler/json/Configura
 
   * `public static CrawlerConfiguration read(Reader reader)` - Implement this first.
   
-  The `reader` parameter contains JSON input. Your `read(Reader reader)` method should read the JSON input and parse it using the `javax.json` library (This package has already been included in the project dependencies, so you should be able to import it without any additional steps.).
+  The `reader` parameter contains JSON input. Your `read(Reader reader)` method should read the JSON input and parse it into a `CrawlerConfiguration` using the Jackson JSON library. This library has already been included in the project dependencies, so you should be able to import classes from `com.fasterxml.jackson` without any additional steps.
 
-  Once the JSON is parsed, use it to populate a `CrawlerConfiguration` object. `CrawlerConfiguration` is a Java class representing the JSON configuration. To build one, create a `CrawlerConfiguration.Builder`. The builder already has well documented setter methods for each JSON property listed above. Using the JSON parsing library, retrieve each JSON property value and set it in the `CrawlerConfiguration.Builder` using the setter method with the corresponding name. Remember to handle null and empty JSON properties — your parser should not crash in these cases! You will then `return` your newly built `CrawlerConfiguration`.
+  First, "tell" Jackson that `CrawlerConfiguration` uses the builder pattern by annotating the `CrawlerConfiguration` class with the `@JsonDeserialize` annotation:
+
+        @JsonDeserialize(builder = CrawlerConfiguration.Builder.class)
+        public final class CrawlerConfiguration {
+          ...
+
+  Next, define the mapping between JSON property names and builder methods by annotating each of the builder's setter methods with `@JsonProperty`. For example:
+
+        @JsonProperty("startPages")
+        public Builder addStartPages(String... startPages) {
+          ...
+
+  Finally, implement `CrawlerConfiguration#read(Reader)` by creating a new `com.fasterxml.jackson.databind.ObjectMapper` and calling `ObjectMapper#readValue`.
   
   * `public CrawlerConfiguration load()` - Implement this next.
   
@@ -134,13 +146,16 @@ Finally, make sure the configuration unit tests pass by running them in the term
 ```
 mvn test -Dtest=ConfigurationLoaderTest
 ```
-### Step 2. Crawler Output
+
+*Hint*: If you get a "Stream closed" failure in the test, try calling `ObjectMapper#disable(Feature)` to disable the `com.fasterxml.jackson.core.JsonParser.Feature.AUTO_CLOSE_SOURCE`. This prevents the Jackson library from closing the input `Reader`, which you should have already closed in `ConfigurationLoader#load()`.
+
+## Step 2. Crawler Output
 
 Now the crawler can load its configuration and run, but it does not know how to tell you about its results. Let's fix that!
 
 You will need to print the results to a JSON file using this format:
 
-#### Example JSON Output
+### Example JSON Output
 
 ```
 {
@@ -166,15 +181,17 @@ You will need to print the results to a JSON file using this format:
                     
     When computing this value for a given crawl, the same URL is never counted twice.
 
-#### Implementing Crawler Output
+### Implementing Crawler Output
 
-Now, it's time to fill in `src/main/java/com/udacity/webcrawler/json/CrawlResultWriter.java`. This should feel similar to the last step, but this time you are writing to a file (or a `Writer`) instead of reading. Consider using the `javax.json` package, which is included with the project.
+Now, it's time to fill in `src/main/java/com/udacity/webcrawler/json/CrawlResultWriter.java`. This should feel similar to the last step, but this time you are writing to a file (or a `Writer`) instead of reading. Just like for the `ConfigurationLoader`, you should use a `ObjectMapper` from the Jackson library, but this time call the `ObjectMapper#writeValue` method.
 
 Once you are done, make sure the tests pass:
 
 ```
 mvn test -Dtest=CrawlResultWriterTest
 ```
+
+*Hint*: If a test fails due to a Stream being closed twice, try calling `ObjectMapper#disable(Feature)` with the `com.fasterxml.jackson.core.JsonGenerator.Feature.AUTO_CLOSE_TARGET` feature. This will prevent Jackson from closing the `Writer` in `CrawlResultWriter#write(Writer)`, since you should have already closed it in `CrawlResultWriter#write(Path)`.
 
 ### Step 3. Running the Legacy Crawler
 
@@ -355,8 +372,8 @@ Please answer the questions in `written-question.txt` and include the completed 
 
 * [jsoup](https://jsoup.org/) - An open-source Java library for working with HTML.
   * License: [MIT License](https://jsoup.org/license)
-* [JSON-P](https://javaee.github.io/jsonp/) - The Java EE standard library for working JSON objects in Java.
-  * License: [CDDL 1.1](https://github.com/javaee/jsonp/blob/master/LICENSE.txt)
+* [Jackson Project](https://github.com/FasterXML/jackson) - Affectionately known as "the best JSON parser for Java".
+  * License: [Apache 2.0](https://github.com/FasterXML/jackson-core/blob/master/src/main/resources/META-INF/LICENSE)
 * [Guice](https://github.com/google/guice/) - An open-source dependency injection framework for Java.
   * License: [Apache 2.0](https://github.com/google/guice/blob/master/COPYING)
 * [Maven](https://maven.apache.org/) - Used to build and manage the project dependencies.
