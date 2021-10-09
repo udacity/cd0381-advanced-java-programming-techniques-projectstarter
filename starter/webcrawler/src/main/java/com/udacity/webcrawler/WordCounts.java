@@ -33,7 +33,7 @@ final class WordCounts {
                 .entrySet()
                 .stream()
                 .sorted(new WordCountComparator())
-                .limit(popularWordCount)
+                .limit(Math.min(popularWordCount, wordCounts.size()))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, Map.Entry::getValue,
                         (e1, e2) -> e1,
