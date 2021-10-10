@@ -42,11 +42,21 @@ public final class WebCrawlerMain {
       Path path = Path.of(resultPath);
       resultWriter.write(path);
     } else{
-      Writer out = new BufferedWriter(new OutputStreamWriter(System.out));
-      resultWriter.write(out);
+      try(Writer out = new BufferedWriter(new OutputStreamWriter(System.out))) {
+        resultWriter.write(out);
+      }
     }
 
     // TODO: Write the profile data to a text file (or System.out if the file name is empty)
+    String profileOutputPath = config.getProfileOutputPath();
+    if(!profileOutputPath.isEmpty()){
+      Path path = Path.of(profileOutputPath);
+      resultWriter.write(path);
+    } else {
+      try(Writer out = new BufferedWriter(new OutputStreamWriter(System.out))){
+        resultWriter.write(out);
+      }
+    }
   }
 
   public static void main(String[] args) throws Exception {
