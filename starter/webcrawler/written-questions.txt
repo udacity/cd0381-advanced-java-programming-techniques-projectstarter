@@ -11,6 +11,8 @@ Q1. Run the web crawler using the configurations located at src/main/config/writ
 
     Why did the parser take more time when run with ParallelWebCrawler?
 
+    Because parser has to wait until all the recursive tasks to be submitted so it can start executing.
+
 
 Q2. Your manager ran your crawler on her old personal computer, using the configurations from Q1, and she notices that
     the sequential crawler actually outperforms the parallel crawler. She would like to know why.
@@ -18,15 +20,24 @@ Q2. Your manager ran your crawler on her old personal computer, using the config
     (a) Suggest one reason why the sequential web crawler was able to read more web pages than the parallel crawler.
         (Hint: Try setting "parallelism" to 1 in the JSON configs to simulate your manager's computer.)
 
+        Assuming her old computer is a single core machine. In it, parallel crawler just gives out the illusion of
+        parallelism, threads aren't actually running in parallel. OS is scheduling multiple threads, thereby it might
+        happen that this context switching overhead is making parallel crawler perform poor as compared to it's
+        counterpart.
+
     (b) Suggest one scenario in which the parallel web crawler will almost certainly perform better than the sequential
         crawler. Why will it perform better?
 
+        Whenever computer would have multiple cores, parallel web crawler will almost always
+        outperform the sequential crawler. Because the context switching overhead would be compensated by multi-cores.
 
 Q3. Analyze your method profiler through the lens of Aspect Oriented Programming, by answering the following questions:
 
     (a) What cross-cutting concern is being addressed by the com.udacity.webcrawler.profiler.Profiler class?
+        Performance profiling
 
     (b) What are the join points of the Profiler in the web crawler program?
+        The methods having "@Profiled" annotation
 
 
 Q4. Identify three (3) different design patterns used in this project, and explain which interfaces, classes, and/or
@@ -35,4 +46,13 @@ Q4. Identify three (3) different design patterns used in this project, and expla
     For each pattern, name one thing about the pattern that you LIKED, and one thing you DISLIKED. If you did not like
     anything, you can name two things you disliked.
 
-
+Ans: (a) Builder:
+        Liked: It makes the code readable and makes it intuitive for the client to use.
+        Disliked: Boilerplate code is too much, in order to bypass it I got to know about Lombok library,
+        have used it one of my other projects and it is amazing.
+     (b) Abstract factory:
+        Liked: Creation of objects becomes plug and play.
+        Disliked: Class bloating.
+     (c) Dependency Injection:
+        Liked: Clean code in the usage files.
+        Disliked: Hard to backtrack for a new developer on the project.
