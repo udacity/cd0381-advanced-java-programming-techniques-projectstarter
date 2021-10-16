@@ -53,7 +53,7 @@ public final class ConfigurationLoader {
         // TODO: Fill in this method
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE); //TODO: Understand this!!
+            mapper.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
             return mapper.readValue(reader, CrawlerConfiguration.class);
         } catch (IOException e) {
             e.printStackTrace();
