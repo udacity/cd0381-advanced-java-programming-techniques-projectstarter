@@ -67,6 +67,7 @@ public final class WebCrawlerMain {
     }
 
     CrawlerConfiguration config = new ConfigurationLoader(Path.of(args[0])).load();
+//    CrawlerConfiguration config = new ConfigurationLoader(Path.of("/Users/ayush/Downloads/WebCrawler/nd079-c2-advanced-java-programming-techniques-projectstarter/starter/webcrawler/src/main/config/sample_config.json")).load();
     new WebCrawlerMain(config).run();
   }
 }

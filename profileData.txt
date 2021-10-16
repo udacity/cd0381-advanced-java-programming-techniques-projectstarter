@@ -1,0 +1,8 @@
+Run at Wed, 13 Oct 2021 04:26:57 GMT
+com.udacity.webcrawler.ParallelWebCrawler#crawl took 0m 3s 545ms
+com.udacity.webcrawler.parser.PageParserImpl#parse took 0m 8s 223ms
+
+Run at Wed, 13 Oct 2021 04:35:06 GMT
+com.udacity.webcrawler.ParallelWebCrawler#crawl took 0m 3s 661ms
+com.udacity.webcrawler.parser.PageParserImpl#parse took 0m 9s 497ms
+
