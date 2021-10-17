@@ -49,10 +49,11 @@ public class InternalCrawler extends RecursiveTask<Boolean> {
                 return false;
             }
         }
-        if (visitedUrls.contains(url)) {
+
+        // atomic operation on ConcurrentSkipListSet
+        if(!visitedUrls.add(url))
             return false;
-        }
-        visitedUrls.add(url);
+
         PageParser.Result result = pageParserFactory.get(url).parse();
 
         for (ConcurrentMap.Entry<String, Integer> e : result.getWordCounts().entrySet()) {
