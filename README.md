@@ -398,7 +398,7 @@ For your submission, please submit the following:
 - All questions in `written-questions.txt` should be answered and uploaded with the rest of the project.
 
 ## Double-Check the Rubric
-Make sure you have completed all the rubric items [here](https://review.udacity.com/#!/rubrics/2927/view).
+Make sure you have completed all of the rubric items [here](https://review.udacity.com/#!/rubrics/2927/view).
 
 ## Submit your Project
 
