@@ -10,13 +10,14 @@ You are given the source code for your company's legacy web crawler, which is si
 
 ### Dependencies
 
-  * Java 11 or higher
+  * Java JDK Version 17
   * Maven 3.6.3 or higher
   * IntelliJ IDEA
 
 ### Installation
 
-  * Download the [JDK 14](https://www.oracle.com/java/technologies/javase-jdk14-downloads.html). Accept the license agreements and run the downloaded installer.
+  * Download the [JDK 17](https://www.oracle.com/java/technologies/downloads). 
+    I recommend JDK 17 since it is the latest long-term support Java version. Accept the license agreements and run the downloaded installer.
   * Follow the official [installation](https://maven.apache.org/install.html) and run `mvn -version` in a terminal to make sure you have at least version 3.6.3 installed.
   * Download the Community Edition of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/). Run the downloaded installer.
 
@@ -57,6 +58,32 @@ If it worked, you should see something like this at the bottom of the terminal:
 [INFO] ------------------------------------------------------------------------
 ```
 
+On the other hand, if your terminal output starts out like ths:
+
+```
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+```
+
+Make sure your terminal's working directory is the "webcrawler" folder which has the pom.xml file in it. When I run the terminal from IntelliJ on my computer, the terminal looks like this:
+
+![IntelliJ terminal working directory](TerminalWorkingDirectory.png)
+
+Notice that the rightmost part of the directory name is **`webcrawler`**, which means the active directory is correct. If your active directory is something different, you should use the `cd` command to change to the correct directory. For example, if your active directory is **`cd0381-advanced-java-programming-techniques-projectstarter`**, you would run the following command:
+
+```
+dustin@dustin-pc:~/IdeaProjects/cd0381-advanced-java-programming-techniques-projectstarter$ cd starter/webcrawler
+dustin@dustin-pc:~/IdeaProjects/cd0381-advanced-java-programming-techniques-projectstarter/starter/webcrawler$
+```
+
+If you are using Windows, you may have to use a backslash (`\`) instead of forward slash (`/`) to separate directory names. On Windows the above command becomes:
+
+```
+cd starter\webcrawler
+```
+
 ### Unit Testing
 
 The starter code comes with some JUnit 5 tests to check your work. You are not expected to write additional tests yourself. The instructions will tell you when and how to run the unit tests for each feature as you go.
@@ -79,7 +106,7 @@ Looking closely at the code repo that was shared with you, it's clear that the w
   "parallelism": 4,
   "implementationOverride": "com.udacity.webcrawler.SequentialWebCrawler",
   "maxDepth": 10,
-  "timeoutSeconds": 2,
+  "timeoutSeconds": 7,
   "popularWordCount": 3,
   "profileOutputPath": "profileData.txt"
   "resultPath": "crawlResults.json"
@@ -248,6 +275,8 @@ If it makes sense for the way you structure your implementation, you should cons
 Remember that in a parallel program, you can have multiple threads accessing data structures at the same time. Because of this, you should use one or more concurrent data structures to compute the output. Keep the following tips in mind:
 
   * For the `urlsVisited` output, the same URL should not be counted twice in the same crawl. *Note*: if a URL returns an HTTP error (such as a 400 error), the crawler still considers that as a "visit".
+
+    **Hint:** If you are struggling to find the best data structure for this part, I highly recommend you revisit the lesson on synchronization. In particular look at the last quiz in the section called **"What are Atomic Operations?"** and look at the answer for "Checking if a string is in the set and adding it if it's not already in the set". That is exactly what we want to do here with URLs!
 
   * When computing the `wordCounts`, the crawler should not accidentally count the results from the same page twice. Remember that the crawler will be downloading and processing multiple web pages at the same time, so this could be tricky!
 

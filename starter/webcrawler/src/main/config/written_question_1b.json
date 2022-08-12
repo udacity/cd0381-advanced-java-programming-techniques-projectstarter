@@ -3,7 +3,7 @@
   "ignoredWords": ["^.{1,3}$"],
   "implementationOverride": "com.udacity.webcrawler.ParallelWebCrawler",
   "maxDepth": 10,
-  "timeoutSeconds": 2,
+  "timeoutSeconds": 7,
   "popularWordCount": 5,
   "profileOutputPath": "profileData.txt"
 }
