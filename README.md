@@ -67,7 +67,7 @@ On the other hand, if your terminal output starts out like ths:
 [INFO] ------------------------------------------------------------------------
 ```
 
-Make sure your terminal's working directory is the "webcrawler" folder which has the pom.xml file in it. When I run the terminal from IntelliJ on my computer, the terminal looks like this:
+Make sure your terminal's working directory is the `webcrawler` folder which has the `pom.xml` file in it. When I run the terminal from IntelliJ on my computer, the terminal looks like this:
 
 ![IntelliJ terminal working directory](TerminalWorkingDirectory.png)
 
@@ -136,7 +136,8 @@ In This Example, Your Crawler Would Only Visit Pages A, B, C, and D
   
 * `popularWordCount` - The number of popular words to record in the output. In this example, the 3 most frequent words will be recorded. If there is a tie in the top 3, word length is used as a tiebreaker, with longer words taking preference. If the words are the same length, words that come first alphabetically get ranked higher.
   
-* `profileOutputPath` - Path to the output file where performance data for this web crawl should be written. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
+* `profileOutputPath` - Path to the output file where performance data for this web crawl should be 
+. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
   
 * `resultPath` - Path where the web crawl result JSON should be written. If a file already exists at that path, it should be overwritten. If this option is empty or unset, the result should be printed to standard output.
 
@@ -393,11 +394,15 @@ java -classpath target/udacity-webcrawler-1.0.jar \
 
 Try changing the starting pages in `src/main/config/sample_config.json` and see what different results you get!
 
-## Step 8. Written Questions
+## Step 8. Project
 
-Please answer the questions in `written-question.txt` and include the completed text file in your submission.
+Please complete the **Project Quiz**. Your answers are not part of your project submission, so you _technically_ aren't required to complete this quiz, but you'll get more out of the project and the course if you do!
                   
 ## Built With
+
+Hooray! You're all done writing code for this course!
+
+Before continuing to the next section, take a brief moment to appreciate all the third-party Java libraries you used. Each of these projects represents many, many hours spent by other  developers to create useful software that you were able to utilize to build your web crawler.
 
 * [jsoup](https://jsoup.org/) - An open-source Java library for working with HTML.
   * License: [MIT License](https://jsoup.org/license)
@@ -424,7 +429,6 @@ For your submission, please submit the following:
  - `src/main/java/com/udacity/webcrawler/profiler/ProfilerImpl.java`
  - `src/main/java/com/udacity/webcrawler/profiler/ProfilingMethodInterceptor.java`
  - `src/main/java/com/udacity/webcrawler/main/WebCrawlerMain.java`
-- All questions in `written-questions.txt` should be answered and uploaded with the rest of the project.
 
 ## Double-Check the Rubric
 Make sure you have completed all the rubric items [here](https://review.udacity.com/#!/rubrics/2927/view).
