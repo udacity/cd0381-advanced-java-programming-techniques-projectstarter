@@ -10,13 +10,14 @@ You are given the source code for your company's legacy web crawler, which is si
 
 ### Dependencies
 
-  * Java 11 or higher
+  * Java JDK Version 17
   * Maven 3.6.3 or higher
   * IntelliJ IDEA
 
 ### Installation
 
-  * Download the [JDK 14](https://www.oracle.com/java/technologies/javase-jdk14-downloads.html). Accept the license agreements and run the downloaded installer.
+  * Download the [JDK 17](https://www.oracle.com/java/technologies/downloads). 
+    I recommend JDK 17 since it is the latest long-term support Java version. Accept the license agreements and run the downloaded installer.
   * Follow the official [installation](https://maven.apache.org/install.html) and run `mvn -version` in a terminal to make sure you have at least version 3.6.3 installed.
   * Download the Community Edition of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/). Run the downloaded installer.
 
@@ -57,6 +58,32 @@ If it worked, you should see something like this at the bottom of the terminal:
 [INFO] ------------------------------------------------------------------------
 ```
 
+On the other hand, if your terminal output starts out like ths:
+
+```
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+```
+
+Make sure your terminal's working directory is the `webcrawler` folder which has the `pom.xml` file in it. When I run the terminal from IntelliJ on my computer, the terminal looks like this:
+
+![IntelliJ terminal working directory](TerminalWorkingDirectory.png)
+
+Notice that the rightmost part of the directory name is **`webcrawler`**, which means the active directory is correct. If your active directory is something different, you should use the `cd` command to change to the correct directory. For example, if your active directory is **`cd0381-advanced-java-programming-techniques-projectstarter`**, you would run the following command:
+
+```
+dustin@dustin-pc:~/IdeaProjects/cd0381-advanced-java-programming-techniques-projectstarter$ cd starter/webcrawler
+dustin@dustin-pc:~/IdeaProjects/cd0381-advanced-java-programming-techniques-projectstarter/starter/webcrawler$
+```
+
+If you are using Windows, you may have to use a backslash (`\`) instead of forward slash (`/`) to separate directory names. On Windows the above command becomes:
+
+```
+cd starter\webcrawler
+```
+
 ### Unit Testing
 
 The starter code comes with some JUnit 5 tests to check your work. You are not expected to write additional tests yourself. The instructions will tell you when and how to run the unit tests for each feature as you go.
@@ -79,7 +106,7 @@ Looking closely at the code repo that was shared with you, it's clear that the w
   "parallelism": 4,
   "implementationOverride": "com.udacity.webcrawler.SequentialWebCrawler",
   "maxDepth": 10,
-  "timeoutSeconds": 2,
+  "timeoutSeconds": 7,
   "popularWordCount": 3,
   "profileOutputPath": "profileData.txt"
   "resultPath": "crawlResults.json"
@@ -109,7 +136,8 @@ In This Example, Your Crawler Would Only Visit Pages A, B, C, and D
   
 * `popularWordCount` - The number of popular words to record in the output. In this example, the 3 most frequent words will be recorded. If there is a tie in the top 3, word length is used as a tiebreaker, with longer words taking preference. If the words are the same length, words that come first alphabetically get ranked higher.
   
-* `profileOutputPath` - Path to the output file where performance data for this web crawl should be written. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
+* `profileOutputPath` - Path to the output file where performance data for this web crawl should be 
+. If there is already a file at that path, the new data should be appended. If this option is empty or unset, the profile data should be printed to standard output.
   
 * `resultPath` - Path where the web crawl result JSON should be written. If a file already exists at that path, it should be overwritten. If this option is empty or unset, the result should be printed to standard output.
 
@@ -249,6 +277,8 @@ Remember that in a parallel program, you can have multiple threads accessing dat
 
   * For the `urlsVisited` output, the same URL should not be counted twice in the same crawl. *Note*: if a URL returns an HTTP error (such as a 400 error), the crawler still considers that as a "visit".
 
+    **Hint:** If you are struggling to find the best data structure for this part, I highly recommend you revisit the lesson on synchronization. In particular look at the last quiz in the section called **"What are Atomic Operations?"** and look at the answer for "Checking if a string is in the set and adding it if it's not already in the set". That is exactly what we want to do here with URLs!
+
   * When computing the `wordCounts`, the crawler should not accidentally count the results from the same page twice. Remember that the crawler will be downloading and processing multiple web pages at the same time, so this could be tricky!
 
     Utilities like [`Collections.synchronizedCollection`](https://docs.oracle.com/javase/10/docs/api/java/util/Collections.html) and [`java.util.concurrent`](https://docs.oracle.com/javase/10/docs/api/java/util/concurrent/package-summary.html) will be helpful, but when using these data structures, think carefully about which methods are and are not atomic, and what guarantees those methods provide.
@@ -364,11 +394,15 @@ java -classpath target/udacity-webcrawler-1.0.jar \
 
 Try changing the starting pages in `src/main/config/sample_config.json` and see what different results you get!
 
-## Step 8. Written Questions
+## Step 8. Project
 
-Please answer the questions in `written-question.txt` and include the completed text file in your submission.
+Please complete the **Project Quiz**. Your answers are not part of your project submission, so you _technically_ aren't required to complete this quiz, but you'll get more out of the project and the course if you do!
                   
 ## Built With
+
+Hooray! You're all done writing code for this course!
+
+Before continuing to the next section, take a brief moment to appreciate all the third-party Java libraries you used. Each of these projects represents many, many hours spent by other  developers to create useful software that you were able to utilize to build your web crawler.
 
 * [jsoup](https://jsoup.org/) - An open-source Java library for working with HTML.
   * License: [MIT License](https://jsoup.org/license)
@@ -395,7 +429,6 @@ For your submission, please submit the following:
  - `src/main/java/com/udacity/webcrawler/profiler/ProfilerImpl.java`
  - `src/main/java/com/udacity/webcrawler/profiler/ProfilingMethodInterceptor.java`
  - `src/main/java/com/udacity/webcrawler/main/WebCrawlerMain.java`
-- All questions in `written-questions.txt` should be answered and uploaded with the rest of the project.
 
 ## Double-Check the Rubric
 Make sure you have completed all the rubric items [here](https://review.udacity.com/#!/rubrics/2927/view).
