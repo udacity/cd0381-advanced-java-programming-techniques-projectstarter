@@ -11,9 +11,8 @@ import com.udacity.webcrawler.profiler.Profiler;
 import com.udacity.webcrawler.profiler.ProfilerModule;
 
 import javax.inject.Inject;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -37,11 +36,37 @@ public final class WebCrawlerMain {
     CrawlResult result = crawler.crawl(config.getStartPages());
     CrawlResultWriter resultWriter = new CrawlResultWriter(result);
     // TODO: Write the crawl results to a JSON file (or System.out if the file name is empty)
-    // TODO: Write the profile data to a text file (or System.out if the file name is empty)
+
+      String resultPath = config.getResultPath();
+    try(Writer standardOutput = new BufferedWriter(new OutputStreamWriter(System.out));){
+      if(resultPath.isEmpty()){
+          resultWriter.write(standardOutput);
+      }else{
+        resultWriter.write(Path.of(resultPath));
+      }
+      // TODO: Write the profile data to a text file (or System.out if the file name is empty)
+      String profileOutputPath = config.getProfileOutputPath();
+      if(profileOutputPath.isEmpty()){
+        standardOutput.write("Printing Profile");
+      }else{
+        try(BufferedWriter profileWriter = new BufferedWriter(
+                Files.newBufferedWriter(Path.of(profileOutputPath))
+        )) {
+          profileWriter.write("Writing Profile");
+        }catch (Exception exception){
+          System.out.println("An error occurred");
+        }
+      }
+    }catch(IOException ioException){
+      System.out.println("An error occurred with the standardOutput");
+    }
+
+
   }
 
   public static void main(String[] args) throws Exception {
     if (args.length != 1) {
+      System.out.println(args.length);
       System.out.println("Usage: WebCrawlerMain [starting-url]");
       return;
     }
