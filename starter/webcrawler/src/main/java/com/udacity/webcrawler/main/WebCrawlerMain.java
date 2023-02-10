@@ -47,15 +47,9 @@ public final class WebCrawlerMain {
       // TODO: Write the profile data to a text file (or System.out if the file name is empty)
       String profileOutputPath = config.getProfileOutputPath();
       if(profileOutputPath.isEmpty()){
-        standardOutput.write("Printing Profile");
+        profiler.writeData(standardOutput);
       }else{
-        try(BufferedWriter profileWriter = new BufferedWriter(
-                Files.newBufferedWriter(Path.of(profileOutputPath))
-        )) {
-          profileWriter.write("Writing Profile");
-        }catch (Exception exception){
-          System.out.println("An error occurred");
-        }
+        profiler.writeData(Path.of(profileOutputPath));
       }
     }catch(IOException ioException){
       System.out.println("An error occurred with the standardOutput");

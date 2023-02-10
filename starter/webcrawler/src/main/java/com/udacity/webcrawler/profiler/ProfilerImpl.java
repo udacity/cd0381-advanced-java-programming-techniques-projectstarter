@@ -1,8 +1,12 @@
 package com.udacity.webcrawler.profiler;
 
 import javax.inject.Inject;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.nio.file.Path;
 import java.time.Clock;
 import java.time.ZonedDateTime;
@@ -32,14 +36,49 @@ final class ProfilerImpl implements Profiler {
     // TODO: Use a dynamic proxy (java.lang.reflect.Proxy) to "wrap" the delegate in a
     //       ProfilingMethodInterceptor and return a dynamic proxy from this method.
     //       See https://docs.oracle.com/javase/10/docs/api/java/lang/reflect/Proxy.html.
+    boolean profiled = false;
+    for(Method method: klass.getDeclaredMethods()){
+      if(method.getAnnotation(Profiled.class) != null){
+        profiled = true;
+        break;
+      }
+    }
+    if(!profiled){throw  new IllegalArgumentException();}
 
-    return delegate;
+    ProfilingMethodInterceptor profilingMethodInterceptor =
+            new ProfilingMethodInterceptor(
+                    clock, state, delegate
+            );
+    Object proxyInstance = Proxy.newProxyInstance(
+            klass.getClassLoader(),
+            new Class[]{klass},
+            profilingMethodInterceptor);
+    return (T) proxyInstance;
   }
 
   @Override
   public void writeData(Path path) {
     // TODO: Write the ProfilingState data to the given file path. If a file already exists at that
     //       path, the new data should be appended to the existing file.
+    try {
+      Writer writer = new FileWriter(path.toFile(), true);
+      writeData(writer);
+    }catch (IOException ioException){
+      System.out.println("There was an error working on this file");
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ProfilerImpl profiler = (ProfilerImpl) o;
+    return Objects.equals(clock, profiler.clock) && Objects.equals(state, profiler.state) && Objects.equals(startTime, profiler.startTime);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(clock, state, startTime);
   }
 
   @Override
