@@ -37,7 +37,7 @@ public final class CrawlResultWriterTest {
     Pattern expected =
         Pattern.compile(".*\\{" +
             ".*\"wordCounts\".*:.*\\{" +
-            ".*\"foo\".*:12.*," +
+            ".*\"foo\".*:.*12," +
             ".*\"bar\".*:.*1," +
             ".*\"foobar\".*:.*98" +
             ".*}.*,.*" +
