@@ -1,5 +1,8 @@
 package com.udacity.webcrawler.json;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -8,6 +11,7 @@ import java.util.Objects;
  * Utility class to write a {@link CrawlResult} to file.
  */
 public final class CrawlResultWriter {
+
   private final CrawlResult result;
 
   /**
@@ -25,10 +29,10 @@ public final class CrawlResultWriter {
    *
    * @param path the file path where the crawl result data should be written.
    */
-  public void write(Path path) {
+  public void write(Path path) throws IOException {
     // This is here to get rid of the unused variable warning.
     Objects.requireNonNull(path);
-    // TODO: Fill in this method.
+    write(path, result);
   }
 
   /**
@@ -36,9 +40,30 @@ public final class CrawlResultWriter {
    *
    * @param writer the destination where the crawl result data should be written.
    */
-  public void write(Writer writer) {
+  public void write(Writer writer) throws IOException {
     // This is here to get rid of the unused variable warning.
     Objects.requireNonNull(writer);
-    // TODO: Fill in this method.
+    write(writer, result);
+  }
+
+  public static void write(Path path, CrawlResult crawlResult) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+    objectMapper.writeValue(path.toFile(), crawlResult);
+  }
+
+  public static void write(Writer writer, CrawlResult crawlResult) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+    objectMapper.writeValue(writer, crawlResult);
+  }
+
+  public void writeToStandardOutput(CrawlResult crawlResult) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    try {
+      objectMapper.writeValue(System.out, crawlResult);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

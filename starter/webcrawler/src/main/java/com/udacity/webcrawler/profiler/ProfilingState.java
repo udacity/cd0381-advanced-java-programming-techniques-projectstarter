@@ -48,7 +48,7 @@ final class ProfilingState {
             .stream()
             .sorted(Map.Entry.comparingByKey())
             .map(e -> e.getKey() + " took " + formatDuration(e.getValue()) + System.lineSeparator())
-            .collect(Collectors.toList());
+            .toList();
 
     // We have to use a for-loop here instead of a Stream API method because Writer#write() can
     // throw an IOException, and lambdas are not allowed to throw checked exceptions.
