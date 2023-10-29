@@ -26,7 +26,7 @@ final class SequentialWebCrawler implements WebCrawler {
   private final int popularWordCount;
   private final int maxDepth;
   private final List<Pattern> ignoredUrls;
-
+  
   @Inject
   SequentialWebCrawler(
       Clock clock,
@@ -58,7 +58,6 @@ final class SequentialWebCrawler implements WebCrawler {
           .setUrlsVisited(visitedUrls.size())
           .build();
     }
-
     return new CrawlResult.Builder()
         .setWordCounts(WordCounts.sort(counts, popularWordCount))
         .setUrlsVisited(visitedUrls.size())
@@ -71,6 +70,7 @@ final class SequentialWebCrawler implements WebCrawler {
       int maxDepth,
       Map<String, Integer> counts,
       Set<String> visitedUrls) {
+	  
     if (maxDepth == 0 || clock.instant().isAfter(deadline)) {
       return;
     }
@@ -83,6 +83,7 @@ final class SequentialWebCrawler implements WebCrawler {
       return;
     }
     visitedUrls.add(url);
+    
     PageParser.Result result = parserFactory.get(url).parse();
     for (Map.Entry<String, Integer> e : result.getWordCounts().entrySet()) {
       if (counts.containsKey(e.getKey())) {

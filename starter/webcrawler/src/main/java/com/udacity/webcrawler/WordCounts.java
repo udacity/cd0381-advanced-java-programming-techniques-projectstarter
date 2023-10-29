@@ -1,9 +1,16 @@
 package com.udacity.webcrawler;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import com.google.common.collect.Multiset.Entry;
 
 /**
  * Utility class that sorts the map of word counts.
@@ -28,18 +35,48 @@ final class WordCounts {
   static Map<String, Integer> sort(Map<String, Integer> wordCounts, int popularWordCount) {
 
     // TODO: Reimplement this method using only the Stream API and lambdas and/or method references.
-
+	  
+	//PriorityQueue 
     PriorityQueue<Map.Entry<String, Integer>> sortedCounts =
         new PriorityQueue<>(wordCounts.size(), new WordCountComparator());
-    sortedCounts.addAll(wordCounts.entrySet());
+    
+    sortedCounts.addAll(wordCounts.entrySet()); // mean get string from the map wordCounts
+    
+    //innit
     Map<String, Integer> topCounts = new LinkedHashMap<>();
+    
+    //for to check element 
     for (int i = 0; i < Math.min(popularWordCount, wordCounts.size()); i++) {
-      Map.Entry<String, Integer> entry = sortedCounts.poll();
+    	
+      Map.Entry<String, Integer> entry = sortedCounts.poll();// poll() get head and delete this head
+      
+      //
       topCounts.put(entry.getKey(), entry.getValue());
     }
     return topCounts;
+    
+//    return wordCounts.entrySet().stream()
+////    		.sorted((o1, o2)->o1.getItem().getValue().compareTo(o2.getItem().getValue()))
+//    		.sorted((o1, o2) -> compare(o1, o2))
+//    		.collect(Collectors.toMap(Map.Entry::getKey,
+//                    e -> e.getValue()
+//                    .stream()
+//                    .mapToInt(Vote::getVoteValue)
+//                    .sum()))
+//    		;
   }
-
+  
+  static Map<String, Integer> supportFunc(String string, Integer stringInt,int sizeWordCounts, int popularWordCount) {
+	  
+	  
+	  Map<String, Integer> topCounts = new LinkedHashMap<>();
+	  for (int i = 0; i < Math.min(popularWordCount, sizeWordCounts); i++) {
+	      //
+	      topCounts.put(string, stringInt);
+	  }
+	  
+	  return topCounts;
+  }
   /**
    * A {@link Comparator} that sorts word count pairs correctly:
    *
@@ -59,6 +96,12 @@ final class WordCounts {
       if (a.getKey().length() != b.getKey().length()) {
         return b.getKey().length() - a.getKey().length();
       }
+      /*
+         this.compareTo(that)
+         a negative int if this < that
+		 0 if this == that
+		 a positive int if this > that
+       */
       return a.getKey().compareTo(b.getKey());
     }
   }
